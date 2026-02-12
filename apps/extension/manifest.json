@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "questLine",
+  "description": "TTRPG-powered focus, collaboration, and play",
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "questLine"
+  },
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "permissions": ["storage", "alarms", "notifications"],
+  "host_permissions": ["https://*.convex.cloud/*", "http://localhost/*"]
+}

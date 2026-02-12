@@ -1,270 +1,225 @@
 # questLine
-🎲 Questline
 
-TTRPG-powered focus, collaboration, and play
-
-Questline is a web-based TTRPG platform that combines AI Dungeon Masters, social role-playing games, and productivity mechanics to support focused work, learning, and collaborative play.
-
-The platform supports traditional tabletop experiences (AI-assisted campaigns, character sheets, dice rolling, social deduction games) and a separate, opt-in Work / Education Mode that reframes focus sessions as shared quests—without task surveillance or productivity policing.
-
-✨ Core Concept
-
-Questline treats time and attention as gameplay, not metrics.
-
-Focus sessions become encounters
-
-Breaks unlock narrative beats
-
-Teams progress by showing up consistently
-
-AI facilitates structure, not control
-
-The result is a system that works equally well for:
-
-Remote teams
-
-Fellowships & cohorts
-
-Study groups
-
-Creative communities
-
-Traditional TTRPG players
-
-🧠 Modes
-1. Play Mode (Traditional TTRPG)
-
-Classic tabletop-inspired gameplay with AI assistance.
-
-AI Dungeon Master (Groq / Llama 3.1)
-
-Character creation & management (D&D 5e-inspired)
-
-Dice rolling engine with visual feedback
-
-Multiplayer lobbies & sessions
-
-Campaign templates & starter adventures
-
-Context-aware AI narration
-
-Chat-based gameplay with history
-
-2. Social Deduction Mode (Werewolf)
-
-A fully playable social deduction game with AI narration and players.
-
-Complete Werewolf / Mafia implementation
-
-Lobby system with invite codes
-
-9+ unique roles (Werewolf, Seer, Doctor, Hunter, Witch, etc.)
-
-Night / Day phase system
-
-Voting mechanics & win condition detection
-
-AI-powered narration and village lore
-
-Smart AI players (multiple difficulty levels)
-
-Real-time suspicion tracking
-
-3. Work / Education Mode (NEW)
-
-A separate context, designed for focus—not entertainment-first play.
-
-Solo or group focus sessions (Pomodoro-inspired)
-
-“Quest Timers” instead of productivity timers
-
-Optional silent co-focus rooms
-
-XP / progression unlocked by session completion
-
-Break phases tied to narrative or light interactions
-
-No task tracking or content monitoring
-
-Designed for consent-based participation
-
-Use cases:
-
-Fellowships & bootcamps
-
-Study groups
-
-Remote teams
-
-Classrooms & learning labs
-
-🧩 Sponsorship & Incentives Layer (Planned)
-
-Designed to support organizations without surveillance or ads.
-
-Sponsor-backed rewards (credits, perks, unlocks)
-
-Branded but lore-friendly campaigns
-
-Seasonal or cohort-based incentives
-
-Optional engagement analytics (time-based only)
-
-Suitable for:
-
-Fellowships
-
-Educational institutions
-
-Conferences
-
-HR engagement pilots
-
-🛠 Tech Stack
-
-Frontend
-
-Next.js 14
-
-TypeScript
-
-Tailwind CSS
-
-Backend
-
-Supabase (Auth, Database, Realtime)
-
-AI
-
-Groq API
-
-Llama 3.1 models
-
-State Management
-
-Zustand
-
-Deployment
-
-Vercel
-
-📁 Project Structure
-├── app/
-│   ├── (auth)/          # Authentication pages
-│   ├── character/       # Character creation & management
-│   ├── play/            # Game session interface
-│   ├── werewolf/        # Social deduction game mode
-│   └── api/
-│       ├── chat/        # AI DM endpoints
-│       └── werewolf/    # Werewolf AI logic
+🎲 TTRPG-powered focus, collaboration, and play
+
+Questline is a web-based TTRPG platform focused first on generic D&D-style gameplay in-browser,
+with optional AI assistance and collaborative table tools.
+
+## Architecture
+
+```
+questLine/
+├── apps/
+│   ├── web/                    # Next.js 14 web application
+│   │   ├── src/
+│   │   │   ├── app/            # App router pages
+│   │   │   └── components/     # React components
+│   │   └── ...
+│   │
+│   └── extension/              # Chrome extension (deferred track)
+│       ├── src/
+│       │   ├── popup/          # Extension popup UI
+│       │   └── background/     # Service worker
+│       └── manifest.json
 │
-├── components/
-│   ├── character/       # Character sheet UI
-│   ├── dice/            # Dice roller UI
-│   ├── chat/            # Chat & narration UI
-│   └── werewolf/        # Werewolf UI components
-│       ├── RoleCard.tsx
-│       ├── PlayerGrid.tsx
-│       ├── VotingUI.tsx
-│       ├── NightActionUI.tsx
-│       └── WerewolfLobby.tsx
+├── packages/
+│   ├── types/                  # Shared TypeScript types
+│   │   └── src/
+│   │       ├── ttrpg.ts        # Generic D&D/TTRPG game types
+│   │       ├── werewolf.ts     # Werewolf game types (deferred track)
+│   │       ├── session.ts      # Focus session types
+│   │       ├── player.ts       # Player/user types
+│   │       └── ai.ts           # AI integration types
+│   │
+│   ├── game-logic/             # Shared game mechanics
+│   │   └── src/
+│   │       ├── ttrpg/          # Generic turn/encounter helpers
+│   │       ├── werewolf/       # Werewolf rules engine (deferred track)
+│   │       ├── pomodoro/       # Timer and session logic
+│   │       └── dice/           # Dice rolling
+│   │
+│   └── ui/                     # Shared UI components
+│       └── src/
+│           └── components/     # Button, Card, Timer, etc.
 │
-├── lib/
-│   ├── supabase/        # Supabase client utilities
-│   ├── ai/              # AI integrations
-│   ├── game/            # Shared game mechanics
-│   └── werewolf/        # Werewolf game logic
-│       ├── game-utils.ts
-│       ├── storage.ts
-│       └── prompts.ts
+├── convex/                     # Convex backend
+│   ├── schema.ts               # Database schema
+│   ├── auth.ts                 # Authentication
+│   ├── games.ts                # Game CRUD
+│   └── players.ts              # Player management
 │
-└── types/
-    ├── character.ts
-    ├── chat.ts
-    ├── dice.ts
-    └── werewolf.ts
+└── turbo.json                  # Turborepo configuration
+```
 
-✅ MVP Feature Status
-Core Gameplay
+## Tech Stack
 
-Character creation & persistence
+| Layer    | Technology           | Purpose                  |
+| -------- | -------------------- | ------------------------ |
+| Monorepo | Turborepo            | Shared code, fast builds |
+| Frontend | Next.js 14           | Web application          |
+| Backend  | Convex               | Real-time database       |
+| Auth     | Convex Auth          | Native authentication    |
+| AI       | OpenRouter           | Model flexibility        |
+| Styling  | Tailwind + shadcn/ui | UI components            |
+| State    | Convex + Zustand     | Server + client state    |
 
-Dice rolling (d4–d100)
+## Getting Started
 
-Dice history & notation support
+### Prerequisites
 
-AI Dungeon Master integration
+- Node.js 18+
+- npm 10+
+- Convex account
 
-Starter campaigns
+### Installation
 
-Chat-based sessions
+```bash
+# Clone the repository
+git clone https://github.com/your-username/questLine.git
+cd questLine
 
-Context-aware narration
+# Install dependencies
+npm install
 
-Werewolf Mode
+# Set up environment variables
+cp apps/web/.env.local.example apps/web/.env.local
+# Edit .env.local with your Convex URL
+```
 
-Full game loop
+### Development
 
-Lobby & invites
+```bash
+# Start all apps in development mode
+npm run dev
 
-AI narration & players
+# Or start specific apps
+cd apps/web && npm run dev
+```
 
-Role logic & win detection
+### Convex Setup
 
-Polish
+```bash
+# Login to Convex
+npx convex login
 
-Responsive UI
+# Initialize Convex (first time only)
+npx convex dev --once
 
-Dark theme optimized for long sessions
+# Start Convex dev server
+npx convex dev
+```
 
-Animations & transitions
+## Scope Priority
 
-Loading & error states
+### 1. Web-first D&D/TTRPG Campaign Play (Current MVP)
 
-Documentation
+Generic tabletop gameplay in the browser is the primary build target.
 
-Setup guide
+- Real-time campaign rooms with invite codes
+- Shared dice tooling (d20 and multi-die notation)
+- Encounter/turn flow primitives in shared game logic
+- Chat and session coordination for remote/async tables
+- AI assistance for narration and DM support
 
-API overview
+### 2. Focus Quest (Secondary)
 
-Demo walkthrough
+Productivity mechanics remain available as optional support systems.
 
-Deployment instructions
+- Solo or team focus sessions
+- Pomodoro-powered timers
+- Token rewards for completing sessions
+- Can be integrated with campaign pacing where useful
 
-🚀 Development Notes
+### 3. Werewolf + Extension (Deferred)
 
-Built as a modular system to support:
+Werewolf social deduction and extension-first experiences are intentionally deferred until the web
+TTRPG MVP is stable.
 
-New game modes
+## Project Structure
 
-Work vs Play separation
+### Packages
 
-Future mobile clients
+- **@questline/types**: Shared TypeScript definitions
+- **@questline/game-logic**: Game rules and mechanics
+- **@questline/ui**: Shared React components
 
-Designed for refactoring during AI Fellowship
+### Apps
 
-Focus on structure + consent, not surveillance
+- **@questline/web**: Next.js web application
+- **@questline/extension**: Chrome extension (deferred scope)
 
-🧭 Roadmap (High Level)
+## Scripts
 
-Pomodoro → Quest abstraction
+```bash
+# Development
+npm run dev          # Start all apps
+npm run build        # Build all packages and apps
+npm run check        # Run all code checks (format, lint, type-check)
+npm run lint         # Lint all packages
+npm run format       # Format code with Prettier
+npm run format:check # Check formatting only
+npm run type-check   # TypeScript type checking
 
-Organization “Realms”
+# Individual packages
+cd packages/types && npm run build
+cd packages/game-logic && npm run build
+cd apps/web && npm run dev
+```
 
-Admin / facilitator dashboards
+### Code quality and Codex
 
-Sponsor incentive hooks
+Before opening a PR or requesting AI code review, run:
 
-Mobile roadmap (iOS)
+```bash
+npm run check
+```
 
-Additional social games
+This runs Prettier (format check), ESLint, and TypeScript in all workspaces. For AI-assisted code review with [OpenAI Codex](https://developers.openai.com/codex), see **AGENTS.md** for project context and how to use Codex (web, CLI, or GitHub Action).
 
-Multiplayer campaign persistence
+## Environment Variables
 
-⏱ Demo Info
+### Web App (`apps/web/.env.local`)
 
-Estimated demo time: 5–7 minutes
+```env
+NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
+OPENROUTER_API_KEY=sk-or-v1-xxx
+```
 
-Initial build time: ~7 days
+### Convex (`convex/.env.local`)
 
-Budget: $0–$50 (MVP testing)
+```env
+OPENROUTER_API_KEY=sk-or-v1-xxx
+```
+
+## Deployment
+
+### Vercel (Web App)
+
+1. Connect your GitHub repository to Vercel
+2. Set the root directory to `apps/web`
+3. Add environment variables
+4. Deploy!
+
+### Chrome Extension
+
+```bash
+cd apps/extension
+npm run build
+# Load the dist/ folder in Chrome as an unpacked extension
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+MIT
+
+---
+
+Built with ❤️ for focused work and collaborative play.

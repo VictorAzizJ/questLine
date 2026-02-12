@@ -1,0 +1,11 @@
+node_modules
+.next
+dist
+.turbo
+**/next-env.d.ts
+convex/_generated
+coverage
+pnpm-lock.yaml
+package-lock.json
+*.min.js
+*.min.css
